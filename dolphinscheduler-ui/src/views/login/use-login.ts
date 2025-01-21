@@ -29,80 +29,80 @@ import { queryBaseDir } from '@/service/modules/resources'
 import { ref } from 'vue'
 
 export function useLogin(state: any) {
-  const router: Router = useRouter()
-  const userStore = useUserStore()
-  const routeStore = useRouteStore()
-  const timezoneStore = useTimezoneStore()
-  const route = useRoute()
-  const handleLogin = () => {
-    state.loginFormRef.validate(async (valid: any) => {
-      if (!valid) {
-        const loginRes: LoginRes = await login({ ...state.loginForm })
-        await userStore.setSessionId(loginRes.sessionId)
-        await userStore.setSecurityConfigType(loginRes.securityConfigType)
-        cookies.set('sessionId', loginRes.sessionId, { path: '/' })
+	const router: Router = useRouter()
+	const userStore = useUserStore()
+	const routeStore = useRouteStore()
+	const timezoneStore = useTimezoneStore()
+	const route = useRoute()
+	const handleLogin = () => {
+		state.loginFormRef.validate(async (valid: any) => {
+			if (!valid) {
+				const loginRes: LoginRes = await login({ ...state.loginForm })
+				// await userStore.setSessionId(loginRes.sessionId)
+				await userStore.setSecurityConfigType(loginRes.securityConfigType)
+				// cookies.set('sessionId', loginRes.sessionId, { path: '/' })
 
-        const userInfoRes: UserInfoRes = await getUserInfo()
-        await userStore.setUserInfo(userInfoRes)
+				// const userInfoRes: UserInfoRes = await getUserInfo()
+				// await userStore.setUserInfo(userInfoRes)
 
-        const baseResDir = await queryBaseDir({
-          type: 'FILE'
-        })
-        const baseUdfDir = await queryBaseDir({
-          type: 'UDF'
-        })
-        await userStore.setBaseResDir(baseResDir)
-        await userStore.setBaseUdfDir(baseUdfDir)
+				const baseResDir = await queryBaseDir({
+					type: 'FILE'
+				})
+				const baseUdfDir = await queryBaseDir({
+					type: 'UDF'
+				})
+				await userStore.setBaseResDir(baseResDir)
+				await userStore.setBaseUdfDir(baseUdfDir)
 
-        const timezone = userInfoRes.timeZone ? userInfoRes.timeZone : 'UTC'
-        await timezoneStore.setTimezone(timezone)
+				const timezone = userInfoRes.timeZone ? userInfoRes.timeZone : 'UTC'
+				await timezoneStore.setTimezone(timezone)
 
-        const path = routeStore.lastRoute
+				const path = routeStore.lastRoute
 
-        router.push({ path: path || 'home' })
-      }
-    })
-  }
+				router.push({ path: path || 'home' })
+			}
+		})
+	}
 
-  const handleGetOAuth2Provider = () => {
-    getOauth2Provider().then((res: Array<OAuth2Provider> | []) => {
-      oauth2Providers.value = res
-    })
-  }
+	const handleGetOAuth2Provider = () => {
+		getOauth2Provider().then((res: Array<OAuth2Provider> | []) => {
+			oauth2Providers.value = res
+		})
+	}
 
-  const oauth2Providers = ref<Array<OAuth2Provider> | []>([])
+	const oauth2Providers = ref<Array<OAuth2Provider> | []>([])
 
-  const gotoOAuth2Page = async (oauth2Provider: OAuth2Provider) => {
-    await clearCookie()
-    window.location.href =
-      `${oauth2Provider.authorizationUri}?client_id=${oauth2Provider.clientId}` +
-      `&response_type=code&redirect_uri=${oauth2Provider.redirectUri}?provider=${oauth2Provider.provider}`
-  }
+	const gotoOAuth2Page = async (oauth2Provider: OAuth2Provider) => {
+		await clearCookie()
+		window.location.href =
+			`${oauth2Provider.authorizationUri}?client_id=${oauth2Provider.clientId}` +
+			`&response_type=code&redirect_uri=${oauth2Provider.redirectUri}?provider=${oauth2Provider.provider}`
+	}
 
-  const handleRedirect = async () => {
-    const authType = route.query.authType
-    if (authType && authType === 'oauth2') {
-      const sessionId = route.query.sessionId
-      if (sessionId) {
-        cookies.set('sessionId', String(sessionId), { path: '/' })
-        const userInfoRes: UserInfoRes = await getUserInfo()
-        await userStore.setUserInfo(userInfoRes)
-        const timezone = userInfoRes.timeZone ? userInfoRes.timeZone : 'UTC'
-        await timezoneStore.setTimezone(timezone)
-        router.push('home')
-      }
-      const error = route.query.error
-      if (error) {
-        window.$message.error(error)
-      }
-    }
-  }
+	const handleRedirect = async () => {
+		const authType = route.query.authType
+		if (authType && authType === 'oauth2') {
+			const sessionId = route.query.sessionId
+			if (sessionId) {
+				cookies.set('sessionId', String(sessionId), { path: '/' })
+				const userInfoRes: UserInfoRes = await getUserInfo()
+				await userStore.setUserInfo(userInfoRes)
+				const timezone = userInfoRes.timeZone ? userInfoRes.timeZone : 'UTC'
+				await timezoneStore.setTimezone(timezone)
+				router.push('home')
+			}
+			const error = route.query.error
+			if (error) {
+				window.$message.error(error)
+			}
+		}
+	}
 
-  return {
-    handleLogin,
-    handleGetOAuth2Provider,
-    gotoOAuth2Page,
-    oauth2Providers,
-    handleRedirect
-  }
+	return {
+		handleLogin,
+		handleGetOAuth2Provider,
+		gotoOAuth2Page,
+		oauth2Providers,
+		handleRedirect
+	}
 }
