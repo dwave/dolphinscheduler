@@ -32,70 +32,74 @@ const uiSettingStore = useUISettingStore()
  * @param {Error} error Error object
  */
 const handleError = (res: AxiosResponse<any, any>) => {
-  // Print to console
-  if (import.meta.env.MODE === 'development') {
-    utils.log.capsule('DolphinScheduler', 'UI')
-    utils.log.error(res)
-  }
-  window.$message.error(res.data.msg)
+	// Print to console
+	if (import.meta.env.MODE === 'development') {
+		utils.log.capsule('DolphinScheduler', 'UI')
+		utils.log.error(res)
+	}
+	window.$message.error(res.data.msg)
 }
 
 const baseRequestConfig: AxiosRequestConfig = {
-  baseURL:
-    import.meta.env.MODE === 'development'
-      ? '/dolphinscheduler'
-      : import.meta.env.VITE_APP_PROD_WEB_URL + '/dolphinscheduler',
-  timeout: uiSettingStore.getApiTimer ? uiSettingStore.getApiTimer : 20000,
-  transformRequest: (params) => {
-    if (_.isPlainObject(params)) {
-      return qs.stringify(params, { arrayFormat: 'repeat' })
-    } else {
-      return params
-    }
-  },
-  paramsSerializer: (params) => {
-    return qs.stringify(params, { arrayFormat: 'repeat' })
-  }
+	baseURL:
+		import.meta.env.MODE === 'development'
+			? '/dolphinscheduler'
+			: import.meta.env.VITE_APP_PROD_WEB_URL + '/dolphinscheduler',
+	timeout: uiSettingStore.getApiTimer ? uiSettingStore.getApiTimer : 20000,
+	transformRequest: (params) => {
+		if (_.isPlainObject(params)) {
+			return qs.stringify(params, { arrayFormat: 'repeat' })
+		} else {
+			return params
+		}
+	},
+	paramsSerializer: (params) => {
+		return qs.stringify(params, { arrayFormat: 'repeat' })
+	}
 }
 
 const service = axios.create(baseRequestConfig)
 
 const err = (err: AxiosError): Promise<AxiosError> => {
-  if (err.response?.status === 401 || err.response?.status === 504) {
-    userStore.setSessionId('')
-    userStore.setSecurityConfigType('')
-    userStore.setUserInfo({})
-    userStore.setBaseResDir('')
-    userStore.setBaseUdfDir('')
-    router.push({ path: '/login' })
-  }
+	if (err.response?.status === 401 || err.response?.status === 504) {
+		userStore.setSessionId('')
+		userStore.setSecurityConfigType('')
+		userStore.setUserInfo({})
+		userStore.setBaseResDir('')
+		userStore.setBaseUdfDir('')
+		// router.push({ path: '/login' })
+	}
 
-  return Promise.reject(err)
+	return Promise.reject(err)
 }
 
 service.interceptors.request.use((config: AxiosRequestConfig<any>) => {
-  config.headers = config.headers || {}
-  config.headers.sessionId = userStore.getSessionId
-  const language = cookies.get('language')
-  if (language) config.headers.language = language
-
-  return config
+	config.headers = config.headers || {}
+	// config.headers.sessionId = userStore.getSessionId
+	const language = cookies.get('language')
+	if (language) config.headers.language = language
+	// 添加公共参数
+	config.params = {
+		...config.params,
+		userId: '1' // 配置默认的公共userId
+	};
+	return config
 }, err)
 
 // The response to intercept
 service.interceptors.response.use((res: AxiosResponse) => {
-  // No code will be processed
-  if (res.data.code === undefined) {
-    return res.data
-  }
+	// No code will be processed
+	if (res.data.code === undefined) {
+		return res.data
+	}
 
-  switch (res.data.code) {
-    case 0:
-      return res.data.data
-    default:
-      handleError(res)
-      throw new Error()
-  }
+	switch (res.data.code) {
+		case 0:
+			return res.data.data
+		default:
+			handleError(res)
+			throw new Error()
+	}
 }, err)
 
 export { service as axios }
