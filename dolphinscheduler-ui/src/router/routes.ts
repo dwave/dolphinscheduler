@@ -25,7 +25,6 @@ import monitorPage from './modules/monitor'
 import securityPage from './modules/security'
 import dataQualityPage from './modules/data-quality'
 // todo: why is it throwing cannot find module and its corresponding type, but the render is working?
-import uiSettingPage from './modules/ui-setting'
 
 // All TSX files under the views folder automatically generate mapping relationship
 const modules = import.meta.glob('/src/views/**/**.tsx')
@@ -35,63 +34,62 @@ const components: { [key: string]: Component } = utils.mapping(modules)
  * Basic page
  */
 const basePage: RouteRecordRaw[] = [
-  {
-    path: '/',
-    redirect: { name: 'home' },
-    meta: { title: '首页' },
-    component: () => import('@/layouts/content'),
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        component: components['home'],
-        meta: {
-          title: '首页',
-          activeMenu: 'home',
-          auth: []
-        }
-      },
-      {
-        path: '/password',
-        name: 'password',
-        component: components['password'],
-        meta: {
-          title: '修改密码',
-          auth: []
-        }
-      },
-      {
-        path: '/profile',
-        name: 'profile',
-        component: components['profile'],
-        meta: {
-          title: '用户信息',
-          auth: []
-        }
-      }
-    ]
-  },
-  projectsPage,
-  resourcesPage,
-  datasourcePage,
-  monitorPage,
-  securityPage,
-  dataQualityPage,
-  uiSettingPage
+	{
+		path: '/',
+		redirect: { name: 'home' },
+		meta: { title: '首页' },
+		component: () => import('@/layouts/content'),
+		children: [
+			{
+				path: '/home',
+				name: 'home',
+				component: components['home'],
+				meta: {
+					title: '首页',
+					activeMenu: 'home',
+					auth: []
+				}
+			},
+			{
+				path: '/password',
+				name: 'password',
+				component: components['password'],
+				meta: {
+					title: '修改密码',
+					auth: []
+				}
+			},
+			{
+				path: '/profile',
+				name: 'profile',
+				component: components['profile'],
+				meta: {
+					title: '用户信息',
+					auth: []
+				}
+			}
+		]
+	},
+	projectsPage,
+	resourcesPage,
+	datasourcePage,
+	monitorPage,
+	securityPage,
+	dataQualityPage,
 ]
 
 /**
  * Login page
  */
 const loginPage: RouteRecordRaw[] = [
-  {
-    path: '/login',
-    name: 'login',
-    component: components['login'],
-    meta: {
-      auth: []
-    }
-  }
+	{
+		path: '/login',
+		name: 'login',
+		component: components['login'],
+		meta: {
+			auth: []
+		}
+	}
 ]
 
 const routes: RouteRecordRaw[] = [...basePage, ...loginPage]
