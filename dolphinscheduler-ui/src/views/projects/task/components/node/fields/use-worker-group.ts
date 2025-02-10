@@ -21,40 +21,40 @@ import { queryWorkerGroupsByProjectCode } from '@/service/modules/projects-worke
 import type { IJsonItem } from '../types'
 
 export function useWorkerGroup(projectCode: number): IJsonItem {
-  const { t } = useI18n()
+	const { t } = useI18n()
 
-  const options = ref([] as { label: string; value: string }[])
-  const loading = ref(false)
+	const options = ref([] as { label: string; value: string }[])
+	const loading = ref(false)
 
-  const getWorkerGroups = async () => {
-    if (loading.value) return
-    loading.value = true
-    await queryWorkerGroupsByProjectCode(projectCode).then((res: any) => {
-      options.value = res.data.map((item: any) => ({
-        label: item.workerGroup,
-        value: item.workerGroup
-      }))
-    })
-    loading.value = false
-  }
+	const getWorkerGroups = async () => {
+		if (loading.value) return
+		loading.value = true
+		await queryWorkerGroupsByProjectCode(projectCode).then((res: any) => {
+			options.value = res.data.map((item: any) => ({
+				label: item.workerGroup,
+				value: item.workerGroup
+			}))
+		})
+		loading.value = false
+	}
 
-  onMounted(() => {
-    getWorkerGroups()
-  })
-  return {
-    type: 'select',
-    field: 'workerGroup',
-    span: 12,
-    name: t('project.node.worker_group'),
-    props: {
-      loading: loading
-    },
-    options: options,
-    validate: {
-      trigger: ['input', 'blur'],
-      required: true,
-      message: t('project.node.worker_group_tips')
-    },
-    value: 'default'
-  }
+	onMounted(() => {
+		getWorkerGroups()
+	})
+	return {
+		type: 'select',
+		field: 'workerGroup',
+		span: 12,
+		name: t('project.node.worker_group'),
+		props: {
+			loading: loading
+		},
+		options: options,
+		validate: {
+			trigger: ['input', 'blur'],
+			required: true,
+			message: t('project.node.worker_group_tips')
+		},
+		value: 'default'
+	}
 }
