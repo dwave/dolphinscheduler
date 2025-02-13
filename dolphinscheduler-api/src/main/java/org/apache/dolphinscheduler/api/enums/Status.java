@@ -596,7 +596,9 @@ public enum Status {
     USED_WORKER_GROUP_EXISTS(1402004,
             "You can not reassign worker groups to the project, cause these worker groups {0} are already used.",
             "Worker组{0}被项目中任务或定时引用，无法重新分配"),
-            ;
+    SEATUNNEL_REQUEST_FAILED(60001, "SeaTunnel Web Error", " 服务请求失败"),
+    SEATUNNEL_UNKNOWN_ERROR(60002, "SeaTunnel Web Error", "  服务发生未知错误"),
+    ;
     private final int code;
     private final String enMsg;
     private final String zhMsg;
