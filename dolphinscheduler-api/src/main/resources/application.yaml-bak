@@ -46,7 +46,7 @@ spring:
     basename: i18n/messages
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.9.99.33:5432/dolphinscheduler
+    url: jdbc:postgresql://127.0.0.1:5432/dolphinscheduler
     username: root
     password: root
     hikari:
@@ -81,6 +81,11 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   packages-to-scan: org.apache.dolphinscheduler.api
+
+seatunnel:
+  web:
+    base-url: http://localhost:8081
+    timeout-millis: 30000
 
 # Mybatis-plus configuration, you don't need to change it
 mybatis-plus:
@@ -118,7 +123,7 @@ registry:
   type: zookeeper
   zookeeper:
     namespace: dolphinscheduler
-    connect-string: 10.9.99.33:2181
+    connect-string: localhost:2181
     retry-policy:
       base-sleep-time: 60ms
       max-sleep: 300ms
@@ -134,14 +139,14 @@ api:
   # global max request number per second
   # default tenant-level max request number
   traffic-control:
-    global-switch: false
-    max-global-qps-rate: 300
-    tenant-switch: false
-    default-tenant-qps-rate: 10
-      #customize-tenant-qps-rate:
-    # eg.
-    #tenant1: 11
-    #tenant2: 20
+      global-switch: false
+      max-global-qps-rate: 300
+      tenant-switch: false
+      default-tenant-qps-rate: 10
+        #customize-tenant-qps-rate:
+        # eg.
+      #tenant1: 11
+      #tenant2: 20
   python-gateway:
     # Weather enable python gateway server or not. The default value is false.
     enabled: false
@@ -155,7 +160,7 @@ api:
     # Python API side.
     gateway-server-port: 25333
     # The address of Python callback client.
-    python-address: 10.9.99.33
+    python-address: 127.0.0.1
     # The port of Python callback client.
     python-port: 25334
     # Close connection of socket server if no other request accept after x milliseconds. Define value is (0 = infinite),
@@ -241,14 +246,9 @@ spring:
       on-profile: mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.9.99.33:3306/dolphinscheduler
+    url: jdbc:mysql://127.0.0.1:3306/dolphinscheduler
     username: root
     password: root
   quartz:
     properties:
       org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
----
-seatunnel:
-  web:
-    base-url: http://10.9.99.33:8801
-    timeout-millis: 30000

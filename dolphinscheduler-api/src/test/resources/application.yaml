@@ -142,3 +142,8 @@ security:
           callbackUrl: ""
           iconUri: ""
           provider: google
+---
+seatunnel:
+  web:
+    base-url: http://localhost:8081
+    timeout-millis: 30000
