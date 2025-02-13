@@ -18,30 +18,27 @@
 import { axios } from '@/service/service'
 
 interface PageReq {
-	pageNo: number
-	pageSize: number
+  pageNo: number
+  pageSize: number
 }
 
 interface TypeReq {
-	jobid: number
-	userId: number
+  jobid: number
+  userId: number
 }
 
-
-
 export function queryListWorkerDefinition(params: PageReq): any {
-	return axios({
-		url: `http://10.9.99.33:8801/seatunnel/api/v1/job/definition`,
-		method: 'get',
-		params
-	})
+  return axios({
+    url: `http://10.9.99.33:8801/seatunnel/api/v1/job/definition`,
+    method: 'get',
+    params
+  })
 }
 
 export function queryRawScript(params: TypeReq): any {
-	return axios({
-		url: '/seatunnel/api/v1/job/executor/jobConfig',
-		method: 'get',
-		params
-	})
+  return axios({
+    url: '/seatunnel/api/v1/job/executor/jobConfig',
+    method: 'get',
+    params
+  })
 }
-

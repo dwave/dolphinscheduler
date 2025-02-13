@@ -17,7 +17,7 @@
 
 import { defineComponent, PropType, renderSlot, Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NModal, NCard, NButton, NSpace } from 'naive-ui'
+import { NModal, NDrawer, NCard, NButton, NSpace } from 'naive-ui'
 import ButtonLink from '@/components/button-link'
 import styles from './index.module.scss'
 import type { LinkOption } from '@/components/modal/types'
@@ -68,6 +68,10 @@ const props = {
   headerLinks: {
     type: Object as PropType<Ref<Array<LinkOption>>>,
     default: [] as LinkOption[]
+  },
+  drawerWidth: {
+    type: String as PropType<string>,
+    default: '50%'
   }
 }
 
@@ -104,12 +108,13 @@ const Modal = defineComponent({
     } = this
 
     return (
-      <NModal
+      <NDrawer
         v-model={[this.show, 'show']}
         class={styles.container}
         mask-closable={false}
         auto-focus={this.autoFocus}
         onMaskClick={onMaskClick}
+        default-width={this.drawerWidth}
       >
         <NCard
           title={this.title}
@@ -168,7 +173,7 @@ const Modal = defineComponent({
             )
           }}
         </NCard>
-      </NModal>
+      </NDrawer>
     )
   }
 })

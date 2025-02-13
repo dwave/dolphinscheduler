@@ -53,6 +53,7 @@ const Sidebar = defineComponent({
         nativeScrollbar={false}
         show-trigger='bar'
         collapse-mode='width'
+        width='200'
         collapsed={this.collapsedRef}
         onCollapse={() => (this.collapsedRef = true)}
         onExpand={() => (this.collapsedRef = false)}
