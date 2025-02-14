@@ -29,7 +29,7 @@ interface TypeReq {
 
 export function queryListWorkerDefinition(params: PageReq): any {
   return axios({
-    url: `http://10.9.99.33:8801/seatunnel/api/v1/job/definition`,
+    url: `/seatunnleweb/jobDefinitionsList`,
     method: 'get',
     params
   })
@@ -37,7 +37,7 @@ export function queryListWorkerDefinition(params: PageReq): any {
 
 export function queryRawScript(params: TypeReq): any {
   return axios({
-    url: '/seatunnel/api/v1/job/executor/jobConfig',
+    url: '/seatunnleweb/jobConfig',
     method: 'get',
     params
   })

@@ -492,6 +492,7 @@ interface INodeData
   timeoutFlag?: boolean
   timeoutNotifyStrategy?: string[]
   workerGroup?: string
+  projectsWorkerDefinition?: number
   code?: number
   name?: string
   preTasks?: number[]

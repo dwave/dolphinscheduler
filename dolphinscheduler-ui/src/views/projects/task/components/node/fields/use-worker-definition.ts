@@ -28,43 +28,34 @@ export function useWorkerDefinition(model: {
 }): IJsonItem {
   const { t } = useI18n()
   const configEditorSpan = computed(() => (model.useCustom ? 24 : 0))
-  const options = ref([] as { label: string; value: string }[])
+  const options = ref([] as { value: number; label: string }[])
   const loading = ref(false)
-  const getWorkerGroups = async () => {
+  const getWorkerGroups = () => {
     if (loading.value) return
     loading.value = true
-    await queryListWorkerDefinition({
+    queryListWorkerDefinition({
       pageSize: 100,
       pageNo: 1,
       searchName: '',
       userId: 2
-    }).then((res: any) => {
-      options.value = res.data.map((item: any) => ({
-        label: item.name,
-        value: item.id
+    }).then((res) => {
+      let resdata = JSON.parse(res)
+      options.value = resdata.data.map((item: any) => ({
+        value: item.id,
+        label: item.name
       }))
+      loading.value = false
     })
-    loading.value = false
   }
 
-  const refreshOptions = async () => {
+  const refreshOptions = () => {
     const parameters = {
-      jobid: model.projectsWorkerDefinition,
-      userId: 2
+      jobDefineId: model.projectsWorkerDefinition,
+      userID: 2
     } as TypeReq
-    const res = await queryRawScript(parameters)
-    // datasourceOptions.value = res.map((item: any) => ({
-    // 	label: item.name,
-    // 	value: item.id
-    // }))
-    // const sourceField = params.sourceField || 'datasource'
-    // if (!res.length && model[sourceField]) model[sourceField] = null
-    // if (res.length && model[sourceField]) {
-    // 	const item = find(res, { id: model[sourceField] })
-    // 	if (!item) {
-    // 		model[sourceField] = null
-    // 	}
-    // }
+    queryRawScript(parameters).then((res) => {
+      model.rawScript = res
+    })
   }
 
   const onChange = () => {
@@ -84,12 +75,12 @@ export function useWorkerDefinition(model: {
         loading: loading,
         'on-update:value': onChange
       },
-      options: options,
-      validate: {
-        trigger: ['input', 'blur'],
-        required: true,
-        message: t('project.node.worker_group_definition_tips')
-      }
+      options: options
+      // validate: {
+      //   trigger: ['input', 'blur'],
+      //   required: false,
+      //   message: t('project.node.worker_group_definition_tips')
+      // }
     },
     {
       type: 'editor',

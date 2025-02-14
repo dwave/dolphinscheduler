@@ -544,6 +544,7 @@ export function formatParams(data: INodeData): {
       timeoutFlag: data.timeoutFlag ? 'OPEN' : 'CLOSE',
       timeoutNotifyStrategy: data.timeoutFlag ? timeoutNotifyStrategy : '',
       workerGroup: data.workerGroup,
+      projectsWorkerDefinition: data.projectsWorkerDefinition,
       cpuQuota: data.cpuQuota || -1,
       memoryMax: data.memoryMax || -1,
       taskExecuteType: data.taskExecuteType
