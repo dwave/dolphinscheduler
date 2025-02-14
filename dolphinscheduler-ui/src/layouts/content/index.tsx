@@ -112,7 +112,7 @@ const Content = defineComponent({
             userDropdownOptions={this.userDropdownOptions}
           />
         </NLayoutHeader> */}
-        <NLayout has-sider position='absolute' style='padding: 1rem'>
+        <NLayout has-sider position='absolute'>
           {this.isShowSide && (
             <SideBar
               sideMenuOptions={this.sideMenuOptions}
@@ -121,7 +121,7 @@ const Content = defineComponent({
           )}
           <NLayoutContent
             native-scrollbar={false}
-            style='padding-left: 1rem'
+            style='padding: 0.6rem'
             contentStyle={'height: 100%'}
           >
             <router-view key={this.currentRoute.fullPath} />
