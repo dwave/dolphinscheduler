@@ -121,7 +121,7 @@ const Content = defineComponent({
           )}
           <NLayoutContent
             native-scrollbar={false}
-            style='padding: 0.6rem'
+            style='padding: 1rem'
             contentStyle={'height: 100%'}
           >
             <router-view key={this.currentRoute.fullPath} />

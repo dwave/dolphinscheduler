@@ -32,7 +32,7 @@ const Sidebar = defineComponent({
     }
   },
   setup() {
-    const collapsedRef = ref(false)
+    const collapsedRef = ref(true)
     const defaultExpandedKeys = [
       'workflow',
       'task',
@@ -61,6 +61,8 @@ const Sidebar = defineComponent({
         <NMenu
           class='tab-vertical'
           value={this.sideKey}
+          iconSize='14'
+          collapsedIconSize='14'
           options={this.sideMenuOptions}
           defaultExpandedKeys={this.defaultExpandedKeys}
           onUpdateValue={this.handleMenuClick}
